@@ -37,7 +37,7 @@ window.onload = function(){
 
 class bootGame extends Phaser.Scene{
     constructor(){
-        super("BootGame - hey");
+        super("BootGame");
     }
     preload(){
       this.load.image('tiles', '/InfiniteSkeleton/assets/tilesets/tileset_1bit.png');
