@@ -1,15 +1,26 @@
 //JavasScript
 
+function randomInterval(min,max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function replaceArray(array, startValue, endValue){
+  for (var j = 0; j < array.length; j++){
+    for(var i = 0; i < array[j].length; i++){
+       if(array[j][i] === startValue){
+         array[j].splice(i, 1, endValue)
+        }
+    }
+  }
+  return array
+}
+
 // Settings
 var constant = {
   roomSizeRange: {
     min: 4,
     max: 8
   }
-}
-
-function randomInterval(min,max){
-    return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 function gridMake(x,y){
@@ -24,8 +35,8 @@ function gridMake(x,y){
 }
 
 function roomGen(wide, tall){
-  var xNum = 4 //randomInterval(1, wide - constant.roomSizeRange.max)
-  var yNum = 8 //randomInterval(1, tall - constant.roomSizeRange.max)
+  var xNum = randomInterval(1, wide - constant.roomSizeRange.max)
+  var yNum = randomInterval(1, tall - constant.roomSizeRange.max)
   var heightNum = randomInterval(constant.roomSizeRange.min, constant.roomSizeRange.max)
   var widthNum = randomInterval(constant.roomSizeRange.min, constant.roomSizeRange.max)
   return {
@@ -57,12 +68,12 @@ function validRoom(grid, {x, y, width, height}){
     return false;
   }
   for (let i = y - 1; i < y + height + 1; i++) {
-			for (let j = x - 1; j < x + width + 1; j++) {
-				if (grid[i][j] === 0) {
-					return false;
-				}
+		for (let j = x - 1; j < x + width + 1; j++) {
+			if (grid[i][j] === 0) {
+				return false;
 			}
 		}
+	}
 }
 
 function ratio(grid){
@@ -88,10 +99,10 @@ function dungeon(x,y){
     var room = roomGen(x,y)
     if (validRoom(grid, room) != false){
       grid = placeCells(grid, room)
-      grid[room.y][room.x] = 4
     }
     roomRatio = ratio(grid)
   }
+  grid = replaceArray(grid, 0, 63)
   return grid;
 }
 

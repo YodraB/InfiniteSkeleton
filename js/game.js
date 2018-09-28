@@ -10,7 +10,7 @@ var gameValues = {
     row: 20
   },
   mapSize: {
-    col: 18,
+    col: 20,
     row: 20
   }
 }
@@ -56,31 +56,25 @@ class playGame extends Phaser.Scene{
   create(){
     // Load a map from a 2D array of tile indices
     var level = dungeon(gameValues.mapSize.col,gameValues.mapSize.row);
+    const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+    const tiles = map.addTilesetImage("tileset_1bit.png", "tiles");
 
-    // When loading from an array, make sure to specify the tileWidth and tileHeight
-    var map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
-    var tileset = map.addTilesetImage("tiles");
-    var basicTiles = {
-      empty: 63,
-      wall: 2,
-      floor: 0,
-      door: 2
-    }
-    this.groundLayer = map.createBlankDynamicLayer("Ground", tileset);
-    this.stuffLayer = map.createBlankDynamicLayer("Stuff", tileset);
+    this.groundLayer = map.createBlankDynamicLayer("Ground", tiles);
+    map.createBlankDynamicLayer("Foreground", tiles);
+
     this.groundLayer.putTilesAt(level, 0, 0)
 
-    map.setCollision(2); //walls 2
+    this.groundLayer.setCollision(2); //walls 2
 
     console.log("map intialized");
 
     // Player
     var spawnX = randomInterval(1, gameValues.mapSize.col - 1);
     var spawnY = randomInterval(1, gameValues.mapSize.row - 1);
-    while (level[spawnY][spawnX] != 0){
-      var spawnX = randomInterval(1, gameValues.mapSize.col - 1);
-      var spawnY = randomInterval(1, gameValues.mapSize.row - 1);
-    }
+    //while (level[spawnY][spawnX] != 0){
+    //  var spawnX = randomInterval(1, gameValues.mapSize.col - 1);
+    //  var spawnY = randomInterval(1, gameValues.mapSize.row - 1);
+    //}
     console.log("spawn chosen")
 
     this.player = this.physics.add.sprite(gameValues.tileSize * (spawnX + 0.5), gameValues.tileSize * (spawnY + 0.5),'player',0)
