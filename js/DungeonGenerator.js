@@ -3,30 +3,29 @@
 // Settings
 var constant = {
   roomSizeRange: {
-    min: 2,
-    max: 6
+    min: 4,
+    max: 8
   }
 }
 
-function randomInterval(min,max)
-{
+function randomInterval(min,max){
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 function gridMake(x,y){
   let grid = [];
-	for (let i = 0; i < y; i++) {
+	for (let yVar = 0; yVar < y; yVar++) {
 		grid.push([]);
-		for (let j = 0; j < x; j++) {
-			grid[i].push(63);
+		for (let xVar = 0; xVar < x; xVar++) {
+			grid[yVar].push(27);
 		}
 	}
   return grid;
 }
 
 function roomGen(wide, tall){
-  var xNum = randomInterval(1, wide - constant.roomSizeRange.max)
-  var yNum = randomInterval(1, tall - constant.roomSizeRange.max)
+  var xNum = 4 //randomInterval(1, wide - constant.roomSizeRange.max)
+  var yNum = 8 //randomInterval(1, tall - constant.roomSizeRange.max)
   var heightNum = randomInterval(constant.roomSizeRange.min, constant.roomSizeRange.max)
   var widthNum = randomInterval(constant.roomSizeRange.min, constant.roomSizeRange.max)
   return {
@@ -38,13 +37,12 @@ function roomGen(wide, tall){
 }
 
 function placeCells(grid, {x, y, width, height, value}){
-  for (var yVar = 0; yVar < height; yVar++){
-    for (var xVar = 0; xVar < width; x++){
-      if (y == 0 || y == height - 1 || x == 0 || x == width - 1) {
-        grid[xVar][yVar] = 2;
+  for (var xVar = x; xVar < width + x; xVar++){
+    for (var yVar = y; yVar < height + y; yVar++){
+      if (yVar == y || yVar == height + y - 1 || xVar == x || xVar == width + x - 1) {
+        grid[yVar][xVar] = 2;
       } else {
-        grid[0][0] = 14; //test
-        grid[xVar][yVar] = 0;
+        grid[yVar][xVar] = 0;
       }
     }
   }
@@ -67,14 +65,32 @@ function validRoom(grid, {x, y, width, height}){
 		}
 }
 
+function ratio(grid){
+  var tileCount = 0
+  var total = (grid.length - 1) * (grid[0].length - 1)
+  for (let yVar = 0; yVar < grid.length - 1; yVar++) {
+		for (let xVar = 0; xVar < grid[0].length - 1; xVar++) {
+      if (grid[yVar][xVar] != 27){
+        tileCount += 1
+      }
+    }
+  }
+  var ratioTiles = tileCount/total * 100
+  return ratioTiles
+}
+
 function dungeon(x,y){
   var grid = gridMake(x,y)
-  var roomAmount = 10 //randomInterval(1, 3)
-  for (var i = 0; i < roomAmount; i++){
+  var roomRatio = ratio(grid)
+  var i = 0
+  while (roomRatio < 30 && i < 999){
+    i++
     var room = roomGen(x,y)
     if (validRoom(grid, room) != false){
       grid = placeCells(grid, room)
+      grid[room.y][room.x] = 4
     }
+    roomRatio = ratio(grid)
   }
   return grid;
 }
