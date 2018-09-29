@@ -17,6 +17,7 @@ function replaceArray(array, startValue, endValue){
 
 // Settings
 var constant = {
+  maxRooms: 10,
   roomSizeRange: {
     min: 4,
     max: 8
@@ -28,7 +29,7 @@ function gridMake(x,y){
 	for (let yVar = 0; yVar < y; yVar++) {
 		grid.push([]);
 		for (let xVar = 0; xVar < x; xVar++) {
-			grid[yVar].push(27);
+			grid[yVar].push(8);
 		}
 	}
   return grid;
@@ -47,7 +48,39 @@ function roomGen(wide, tall){
   }
 }
 
-function placeCells(grid, {x, y, width, height, value}){
+function roomFromSeed(mapx, mapy, {x, y, width, height}){
+  var direction = 1 //randomInterval(1, 4)
+  switch(direction) {
+    case 1:
+      y -= height - 1;
+      if (y < 1){
+        y = 1
+      }
+      break;
+    case 2:
+      y += 1
+      if (y > mapy){
+        y = mapy - 2
+      }
+      break;
+    case 3:
+      x -= 1 + width
+      break;
+    case 4:
+      x -= 1
+      break;
+    default:
+      y = 3;
+  }
+  return {
+    x: x,
+    y: y,
+    height: height,
+    width: width
+  }
+}
+
+function placeCells(grid, {x, y, width, height}){
   for (var xVar = x; xVar < width + x; xVar++){
     for (var yVar = y; yVar < height + y; yVar++){
       if (yVar == y || yVar == height + y - 1 || xVar == x || xVar == width + x - 1) {
@@ -81,7 +114,7 @@ function ratio(grid){
   var total = (grid.length - 1) * (grid[0].length - 1)
   for (let yVar = 0; yVar < grid.length - 1; yVar++) {
 		for (let xVar = 0; xVar < grid[0].length - 1; xVar++) {
-      if (grid[yVar][xVar] != 27){
+      if (grid[yVar][xVar] != 8){
         tileCount += 1
       }
     }
@@ -92,18 +125,22 @@ function ratio(grid){
 
 function dungeon(x,y){
   var grid = gridMake(x,y)
+  grid[0][0] = 7
   var roomRatio = ratio(grid)
   var i = 0
+  var room = roomGen(x,y)
+  var newRoom = roomFromSeed(x, y, room)
   while (roomRatio < 30 && i < 999){
     i++
-    var room = roomGen(x,y)
-    if (validRoom(grid, room) != false){
-      grid = placeCells(grid, room)
+    newRoom = roomFromSeed(x, y, grow)
+    if (validRoom(grid, grow) != false){
+      grid = placeCells(grid, grow)
     }
     roomRatio = ratio(grid)
   }
-  grid = replaceArray(grid, 0, 63)
   return grid;
 }
+
+// empty = 8
 
 export { randomInterval, dungeon };

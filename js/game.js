@@ -1,6 +1,5 @@
 // JavaScript Document
 
-import { randomInterval, dungeon } from "./DungeonGenerator.js";
 
 var game;
 var gameValues = {
