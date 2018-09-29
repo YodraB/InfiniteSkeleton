@@ -1,5 +1,6 @@
 // JavaScript Document
 
+import { randomInterval, dungeOn } from "./dungeOn.js";
 
 var game;
 var gameValues = {
@@ -39,7 +40,7 @@ class bootGame extends Phaser.Scene{
         super("BootGame");
     }
     preload(){
-      this.load.image('tiles', '/InfiniteSkeleton/assets/tilesets/tileset_1bit.png');
+      this.load.image('tiles', '/InfiniteSkeleton/assets/tilesets/MyBasicTiles.png');
       this.load.spritesheet('player', '/InfiniteSkeleton/assets/sprites/BasePerson.png', { frameWidth: 12, frameHeight: 16});
     }
     create(){
@@ -54,7 +55,8 @@ class playGame extends Phaser.Scene{
   }
   create(){
     // Load a map from a 2D array of tile indices
-    var level = dungeon(gameValues.mapSize.col,gameValues.mapSize.row);
+    var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 10, 10);
+
     const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
     const tiles = map.addTilesetImage("tileset_1bit.png", "tiles");
 
@@ -70,11 +72,11 @@ class playGame extends Phaser.Scene{
     // Player
     var spawnX = randomInterval(1, gameValues.mapSize.col - 1);
     var spawnY = randomInterval(1, gameValues.mapSize.row - 1);
-    //while (level[spawnY][spawnX] != 0){
-    //  var spawnX = randomInterval(1, gameValues.mapSize.col - 1);
-    //  var spawnY = randomInterval(1, gameValues.mapSize.row - 1);
-    //}
-    console.log("spawn chosen")
+
+    while (level[spawnY][spawnX] != 0){
+      var spawnX = randomInterval(1, gameValues.mapSize.col - 1);
+      var spawnY = randomInterval(1, gameValues.mapSize.row - 1);
+    }
 
     this.player = this.physics.add.sprite(gameValues.tileSize * (spawnX + 0.5), gameValues.tileSize * (spawnY + 0.5),'player',0)
     // Watch the player and worldLayer for collisions, for the duration of the scene:

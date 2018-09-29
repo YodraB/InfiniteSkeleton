@@ -26,12 +26,25 @@ function createArray(token, x, y) {
 
   //lets create a randomly generated map for our dungeon crawler
   function createMap(x, y, maxTunnel, maxLength, token) {
-    let map = createArray(token, x, y), // create a 2d array full of 1's
+    let map = createArray(token, x, y), // create a 2d array full of tokens
       currentRow = Math.floor(Math.random() * y), // our current row - start at a random spot
       currentColumn = Math.floor(Math.random() * x), // our current column - start at a random spot
       directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
       lastDirection = [], // save the last direction we went
       randomDirection; // next turn/direction - holds a value from directions
+
+      if (currentRow < 1){
+        currentRow = 1;
+      }
+      if (currentRow > y - 1){
+        currentRow = y - 2;
+      }
+      if (currentColumn < 1){
+        currentColumn = 1;
+      }
+      if (currentColumn > x - 1){
+        currentColumn = x - 2;
+      }
 
     // lets create some tunnels - while maxTunnel, dimentions, and maxLength  is greater than 0.
     while (maxTunnel && x && y && maxLength) {
@@ -51,10 +64,10 @@ function createArray(token, x, y) {
       while (tunnelLength < randomLength) {
 
         //break the loop if it is going out of the map
-        if (((currentRow === 0) && (randomDirection[0] === -1)) ||
-            ((currentColumn === 0) && (randomDirection[1] === -1)) ||
-            ((currentRow === y - 1) && (randomDirection[0] === 1)) ||
-            ((currentColumn === x - 1) && (randomDirection[1] === 1))) {
+        if (((currentRow === 1) && (randomDirection[0] === -1)) ||
+            ((currentColumn === 1) && (randomDirection[1] === -1)) ||
+            ((currentRow === y - 2) && (randomDirection[0] === 1)) ||
+            ((currentColumn === x - 2) && (randomDirection[1] === 1))) {
           break;
         } else {
           map[currentRow][currentColumn] = 0; //set the value of the index in map to 0 (a tunnel, making it one longer)
