@@ -40,7 +40,7 @@ class bootGame extends Phaser.Scene{
         super("BootGame");
     }
     preload(){
-      this.load.image('tiles', '/InfiniteSkeleton/assets/tilesets/tileset_1bit.png');
+      this.load.image('tiles', '/InfiniteSkeleton/assets/tilesets/MyBasicTiles.png');
       this.load.spritesheet('player', '/InfiniteSkeleton/assets/sprites/BasePerson.png', { frameWidth: 12, frameHeight: 16});
     }
     create(){
