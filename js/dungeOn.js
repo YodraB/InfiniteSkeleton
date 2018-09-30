@@ -33,18 +33,18 @@ function createArray(token, x, y) {
       lastDirection = [], // save the last direction we went
       randomDirection; // next turn/direction - holds a value from directions
 
-      if (currentRow < 1){
-        currentRow = 1;
-      }
-      if (currentRow > y - 1){
-        currentRow = y - 2;
-      }
-      if (currentColumn < 1){
-        currentColumn = 1;
-      }
-      if (currentColumn > x - 1){
-        currentColumn = x - 2;
-      }
+    console.log('start', currentRow, currentColumn)
+
+    if (currentRow < 2){
+      currentRow = 2;
+      console.log('caught')
+    } else if (currentRow > y - 2){
+      currentRow = y - 3;
+    } else if (currentColumn < 2){
+      currentColumn = 2;
+    } else if (currentColumn > x - 2){
+      currentColumn = x - 3;
+    }
 
     // lets create some tunnels - while maxTunnel, dimentions, and maxLength  is greater than 0.
     while (maxTunnel && x && y && maxLength) {
@@ -64,13 +64,14 @@ function createArray(token, x, y) {
       while (tunnelLength < randomLength) {
 
         //break the loop if it is going out of the map
-        if (((currentRow === 1) && (randomDirection[0] === -1)) ||
-            ((currentColumn === 1) && (randomDirection[1] === -1)) ||
-            ((currentRow === y - 2) && (randomDirection[0] === 1)) ||
-            ((currentColumn === x - 2) && (randomDirection[1] === 1))) {
+        if (((currentRow === 3) && (randomDirection[0] === -1)) ||
+            ((currentColumn === 3) && (randomDirection[1] === -1)) ||
+            ((currentRow === y - 4) && (randomDirection[0] === 1)) ||
+            ((currentColumn === x - 4) && (randomDirection[1] === 1))) {
           break;
         } else {
           map[currentRow][currentColumn] = 0; //set the value of the index in map to 0 (a tunnel, making it one longer)
+          console.log(currentRow, currentColumn)
           currentRow += randomDirection[0]; //add the value from randomDirection to row and col (-1, 0, or 1) to update our location
           currentColumn += randomDirection[1];
           tunnelLength++; //the tunnel is now one longer, so lets increment that variable
@@ -82,12 +83,37 @@ function createArray(token, x, y) {
         maxTunnel--; // we created a whole tunnel so lets decrement how many we have left to create
       }
     }
+    //map = styleMap(map, 0)
+    map = styleMap(map, 3)
     return map; // all our tunnels have been created and our map is complete, so lets return it to our render()
   };
 
-function dungeOn(x, y, maxTunnel, maxLength){
-  var grid = createMap(x, y, maxTunnel, maxLength, 2)
-  return grid
+function styleMap(map, token){
+  var directionArray = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, 1], [1, -1], [-1, 1]];
+  for (var y = 0; y < map.length; y++){
+    for (var x = 0; x < map[y].length; x++){
+      var neighbors = []
+      for (var i = 0; i < directionArray.length; i++){
+        if (y > 0 && y < map.length - 1 && x > 0 && x < map[y].length - 1){
+          if (map[y + directionArray[i][0]][x + directionArray[i][1]] == 0 && map[y][x] != 0){
+            map[y][x] = token
+          }
+        }
+      }
+    }
+  }
+  return map
 }
 
-export { randomInterval, dungeOn };
+function dungeOn(x, y, maxTunnel, maxLength){
+  var map = createMap(x, y, maxTunnel, maxLength, 2)
+  //dipslays array
+  //output = ''
+  //for (var i = 0; i < map.length; i++){
+  //  output += map[i] + '<br>'
+  //}
+  //document.getElementById("demo").innerHTML = output;
+  return map
+}
+
+export { randomInterval, dungeOn }

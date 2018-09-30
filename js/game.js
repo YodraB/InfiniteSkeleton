@@ -65,7 +65,7 @@ class playGame extends Phaser.Scene{
 
     this.groundLayer.putTilesAt(level, 0, 0)
 
-    this.groundLayer.setCollision(2); //walls 2
+    this.groundLayer.setCollision([2, 3]); //walls 3
 
     console.log("map intialized");
 
