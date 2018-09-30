@@ -6,12 +6,12 @@ var game;
 var gameValues = {
   tileSize: 16,
   screenSize:{
-    col: 20,
-    row: 20
+    col: 5,
+    row: 5
   },
   mapSize: {
-    col: 20,
-    row: 20
+    col: 40,
+    row: 40
   }
 }
 
@@ -55,7 +55,7 @@ class playGame extends Phaser.Scene{
   }
   create(){
     // Load a map from a 2D array of tile indices
-    var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 10, 10);
+    var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 20, 10);
 
     const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
     const tiles = map.addTilesetImage("tileset_1bit.png", "tiles");
@@ -65,7 +65,7 @@ class playGame extends Phaser.Scene{
 
     this.groundLayer.putTilesAt(level, 0, 0)
 
-    this.groundLayer.setCollision(2); //walls 2
+    this.groundLayer.setCollision([2, 3]); //walls 3
 
     console.log("map intialized");
 
@@ -86,7 +86,21 @@ class playGame extends Phaser.Scene{
     this.physics.world.bounds.height = map.heightInPixels;
     this.player.setCollideWorldBounds(true);
 
-    //Camera
+    // Player animations
+    this.anims.create({
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('player', { start: 1, end: 2 }),
+      frameRate: 8,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'stand',
+      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+      frameRate: 1
+    })
+
+    // Camera
     var camera = this.cameras.main;
     camera.startFollow(this.player);
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -95,6 +109,9 @@ class playGame extends Phaser.Scene{
     this.cursors = this.input.keyboard.createCursorKeys();
   }
   update(time,delta){
+    var player = this.player;
+    var speed = 80;
+    const prevVelocity = player.body.velocity.clone();
 
     // Player movement
     this.player.body.setVelocity(0);
@@ -102,24 +119,31 @@ class playGame extends Phaser.Scene{
     // Horizontal movement
     if (this.cursors.left.isDown)
     {
-        this.player.body.setVelocityX(-80);
+        this.player.body.setVelocityX(-speed);
+        player.setFlipX(true);
     }
     else if (this.cursors.right.isDown)
     {
-        this.player.body.setVelocityX(80);
+        this.player.body.setVelocityX(speed);
+        player.setFlipX(false)
     }
 
     // Vertical movement
     if (this.cursors.up.isDown)
     {
-        this.player.body.setVelocityY(-80);
+        this.player.body.setVelocityY(-speed);
     }
     else if (this.cursors.down.isDown)
     {
-        this.player.body.setVelocityY(80);
+        this.player.body.setVelocityY(speed);
+    }
+
+    if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.down.isDown || this.cursors.up.isDown) {
+      player.anims.play("walk", true);
+    } else {
+      player.anims.play('stand');
     }
   }
-
 }
 
 function resizeGame(){
