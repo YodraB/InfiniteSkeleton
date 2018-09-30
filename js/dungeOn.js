@@ -26,7 +26,7 @@ function createArray(token, x, y) {
 
   //lets create a randomly generated map for our dungeon crawler
   function createMap(x, y, maxTunnel, maxLength, token) {
-    let map = createArray(token, x, y), // create a 2d array full of tokens
+    let map = createArray(22, x, y), // create a 2d array full of tokens
       currentRow = Math.floor(Math.random() * y), // our current row - start at a random spot
       currentColumn = Math.floor(Math.random() * x), // our current column - start at a random spot
       directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
@@ -40,10 +40,13 @@ function createArray(token, x, y) {
       console.log('caught')
     } else if (currentRow > y - 2){
       currentRow = y - 3;
+      console.log('caught')
     } else if (currentColumn < 2){
       currentColumn = 2;
+      console.log('caught')
     } else if (currentColumn > x - 2){
       currentColumn = x - 3;
+      console.log('caught')
     }
 
     // lets create some tunnels - while maxTunnel, dimentions, and maxLength  is greater than 0.
@@ -71,7 +74,6 @@ function createArray(token, x, y) {
           break;
         } else {
           map[currentRow][currentColumn] = 0; //set the value of the index in map to 0 (a tunnel, making it one longer)
-          console.log(currentRow, currentColumn)
           currentRow += randomDirection[0]; //add the value from randomDirection to row and col (-1, 0, or 1) to update our location
           currentColumn += randomDirection[1];
           tunnelLength++; //the tunnel is now one longer, so lets increment that variable
@@ -83,8 +85,7 @@ function createArray(token, x, y) {
         maxTunnel--; // we created a whole tunnel so lets decrement how many we have left to create
       }
     }
-    //map = styleMap(map, 0)
-    map = styleMap(map, 3)
+    map = styleMap(map, 2)
     return map; // all our tunnels have been created and our map is complete, so lets return it to our render()
   };
 
@@ -105,15 +106,18 @@ function styleMap(map, token){
   return map
 }
 
-function dungeOn(x, y, maxTunnel, maxLength){
-  var map = createMap(x, y, maxTunnel, maxLength, 2)
-  //dipslays array
-  //output = ''
-  //for (var i = 0; i < map.length; i++){
-  //  output += map[i] + '<br>'
-  //}
-  //document.getElementById("demo").innerHTML = output;
-  return map
+function htmlShow(array){
+  output = ''
+  for (var i = 0; i < array.length; i++){
+    output += array[i] + '<br>'
+  }
+  document.getElementById("demo").innerHTML = output;
 }
 
-export { randomInterval, dungeOn }
+function dungeOn(x, y, maxTunnel, maxLength){
+  var map = createMap(x, y, maxTunnel, maxLength, 2)
+  htmlShow(map)
+  //return map
+}
+
+//export { randomInterval, dungeOn }

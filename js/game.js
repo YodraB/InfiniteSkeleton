@@ -10,8 +10,8 @@ var gameValues = {
     row: 20
   },
   mapSize: {
-    col: 20,
-    row: 20
+    col: 40,
+    row: 40
   }
 }
 
@@ -55,7 +55,7 @@ class playGame extends Phaser.Scene{
   }
   create(){
     // Load a map from a 2D array of tile indices
-    var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 10, 10);
+    var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 20, 10);
 
     const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
     const tiles = map.addTilesetImage("tileset_1bit.png", "tiles");
