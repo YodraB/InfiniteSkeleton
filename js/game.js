@@ -6,8 +6,8 @@ var game;
 var gameValues = {
   tileSize: 16,
   screenSize:{
-    col: 20,
-    row: 20
+    col: 5,
+    row: 5
   },
   mapSize: {
     col: 40,

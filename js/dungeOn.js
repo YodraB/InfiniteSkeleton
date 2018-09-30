@@ -27,27 +27,11 @@ function createArray(token, x, y) {
   //lets create a randomly generated map for our dungeon crawler
   function createMap(x, y, maxTunnel, maxLength, token) {
     let map = createArray(22, x, y), // create a 2d array full of tokens
-      currentRow = Math.floor(Math.random() * y), // our current row - start at a random spot
-      currentColumn = Math.floor(Math.random() * x), // our current column - start at a random spot
+      currentRow = randomInterval(3,y - 4), // our current row - start at a random spot
+      currentColumn = randomInterval(3,x - 4), // our current column - start at a random spot
       directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
       lastDirection = [], // save the last direction we went
       randomDirection; // next turn/direction - holds a value from directions
-
-    console.log('start', currentRow, currentColumn)
-
-    if (currentRow < 2){
-      currentRow = 2;
-      console.log('caught')
-    } else if (currentRow > y - 2){
-      currentRow = y - 3;
-      console.log('caught')
-    } else if (currentColumn < 2){
-      currentColumn = 2;
-      console.log('caught')
-    } else if (currentColumn > x - 2){
-      currentColumn = x - 3;
-      console.log('caught')
-    }
 
     // lets create some tunnels - while maxTunnel, dimentions, and maxLength  is greater than 0.
     while (maxTunnel && x && y && maxLength) {
@@ -63,14 +47,14 @@ function createArray(token, x, y) {
       var randomLength = Math.ceil(Math.random() * maxLength), //length the next tunnel will be (max of maxLength)
         tunnelLength = 0; //current length of tunnel being created
 
-		// lets loop until our tunnel is long enough or until we hit an edge
+		  // lets loop until our tunnel is long enough or until we hit an edge
       while (tunnelLength < randomLength) {
 
         //break the loop if it is going out of the map
-        if (((currentRow === 3) && (randomDirection[0] === -1)) ||
-            ((currentColumn === 3) && (randomDirection[1] === -1)) ||
-            ((currentRow === y - 4) && (randomDirection[0] === 1)) ||
-            ((currentColumn === x - 4) && (randomDirection[1] === 1))) {
+        if (((currentRow <= 3) && (randomDirection[0] === -1)) ||
+            ((currentColumn <= 3) && (randomDirection[1] === -1)) ||
+            ((currentRow >= y - 4) && (randomDirection[0] === 1)) ||
+            ((currentColumn >= x - 4) && (randomDirection[1] === 1))) {
           break;
         } else {
           map[currentRow][currentColumn] = 0; //set the value of the index in map to 0 (a tunnel, making it one longer)
@@ -115,9 +99,9 @@ function htmlShow(array){
 }
 
 function dungeOn(x, y, maxTunnel, maxLength){
-  var map = createMap(x, y, maxTunnel, maxLength, 2)
-  htmlShow(map)
-  //return map
+  var map = createMap(x, y, maxTunnel, maxLength, 2);
+  //htmlShow(map);
+  return map
 }
 
-//export { randomInterval, dungeOn }
+export { randomInterval, dungeOn }
