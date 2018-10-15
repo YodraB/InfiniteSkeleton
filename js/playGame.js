@@ -25,8 +25,8 @@ class playGame extends Phaser.Scene {
 
         // *Player
         // Get spawn location
-        var spawnX = gameValues.screenSize.col / 2,
-            spawnY = gameValues.screenSize.row / 2; //spawnX spawnY: randomInterval(1, gameValues.mapSize.col - 1); randomInterval(1, gameValues.mapSize.row - 1);
+        var spawnX = Phaser.Math.RND.integerInRange(0, gameValues.screenSize.col - 1),
+            spawnY = Phaser.Math.RND.integerInRange(0, gameValues.screenSize.row - 1);
 
         // Create player sprite
         this.player = this.physics.add.sprite(gameValues.tileSize * (spawnX + 0.5), gameValues.tileSize * (spawnY + 0.5), 'player', 0);
@@ -61,27 +61,64 @@ class playGame extends Phaser.Scene {
         this.key_A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
         this.key_W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
         this.key_S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+        
+        //Touch input
+        this.leftTouch = false
+        this.leftZone = this.add.zone(gameValues.tileSize, this.sys.game.config.height/2, gameValues.tileSize * 2, gameValues.tileSize * 4)
+        this.upTouch = false
+        this.upZone = this.add.zone(this.sys.game.config.width/2, gameValues.tileSize, gameValues.tileSize * 4, gameValues.tileSize * 2)
+        this.rightTouch = false
+        this.rightZone = this.add.zone(this.sys.game.config.width - gameValues.tileSize, this.sys.game.config.height/2, gameValues.tileSize * 2, gameValues.tileSize * 4)
+        this.downTouch = false
+        this.downZone = this.add.zone(this.sys.game.config.width/2, this.sys.game.config.height - gameValues.tileSize, gameValues.tileSize * 4, gameValues.tileSize * 2)
     };
 
     // Called once per frame - default 60 fps
     update() {
+        
+        // Touch input
+        
+        this.leftZone.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
+            this.leftTouch = true;
+        }, this);
+        this.leftZone.setInteractive().on('pointerup', function(pointer, localX, localY, event){
+            this.leftTouch = false;
+        }, this);
+        this.upZone.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
+            this.upTouch = true;
+        }, this);
+        this.upZone.setInteractive().on('pointerup', function(pointer, localX, localY, event){
+            this.upTouch = false;
+        }, this);
+        this.rightZone.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
+            this.rightTouch = true;
+        }, this);
+        this.rightZone.setInteractive().on('pointerup', function(pointer, localX, localY, event){
+            this.rightTouch = false;
+        }, this);
+        this.downZone.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
+            this.downTouch = true;
+        }, this);
+        this.downZone.setInteractive().on('pointerup', function(pointer, localX, localY, event){
+            this.downTouch = false;
+        }, this);
 
         // Player movement
         this.player.body.setVelocity(0);
 
         // Horizontal movement
-        if (this.cursors.left.isDown || this.key_A.isDown) {
+        if (this.cursors.left.isDown || this.key_A.isDown || this.leftTouch == true) {
             this.player.body.setVelocityX(-this.playerSpeed);
             this.player.setFlipX(true);
-        } else if (this.cursors.right.isDown || this.key_D.isDown || this.input.activePointer.isDown) { //click/touch input here
+        } else if (this.cursors.right.isDown || this.key_D.isDown || this.rightTouch == true) {
             this.player.body.setVelocityX(this.playerSpeed);
             this.player.setFlipX(false);
         }
 
         // Vertical movement
-        if (this.cursors.up.isDown || this.key_W.isDown) {
+        if (this.cursors.up.isDown || this.key_W.isDown || this.upTouch == true) {
             this.player.body.setVelocityY(-this.playerSpeed);
-        } else if (this.cursors.down.isDown || this.key_S.isDown) {
+        } else if (this.cursors.down.isDown || this.key_S.isDown || this.downTouch == true) {
             this.player.body.setVelocityY(this.playerSpeed);
         }
 
