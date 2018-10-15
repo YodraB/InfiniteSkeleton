@@ -90,7 +90,7 @@ function styleMap(map, token){
   return map
 }
 
-function htmlShow(array){
+function htmlShow(array){ //shows an array straight in the demo paragraph
   output = ''
   for (var i = 0; i < array.length; i++){
     output += array[i] + '<br>'
@@ -98,7 +98,7 @@ function htmlShow(array){
   document.getElementById("demo").innerHTML = output;
 }
 
-function dungeOn(x, y, maxTunnel, maxLength){
+function dungeOn(x, y, maxTunnel, maxLength){ //main dungeon generation function
   var map = createMap(x, y, maxTunnel, maxLength, 2);
   //htmlShow(map);
   return map
