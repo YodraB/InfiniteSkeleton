@@ -60,7 +60,7 @@ class playGame extends Phaser.Scene{ // the main game scene
     var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 100, 10); //dungeOn(x, y, maxTunnel, maxLength)
 
     const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
-    const tiles = map.addTilesetImage("tileset_1bit.png", "tiles");
+    const tiles = map.addTilesetImage("MyBasicTiles.png", "tiles");
 
     this.groundLayer = map.createBlankDynamicLayer("Ground", tiles);
     map.createBlankDynamicLayer("Foreground", tiles);

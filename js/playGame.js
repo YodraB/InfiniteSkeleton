@@ -20,20 +20,48 @@ class playGame extends Phaser.Scene {
 
     // Called once after preload
     create() {
-        // BG sprite
-        this.add.sprite(this.sys.game.config.width / 2, this.sys.game.config.height / 2, 'tiles');
+        // Load a map from a 2D array of tile indices
+        var level = dungeOn(gameValues.mapSize.col, gameValues.mapSize.row, 100, 10); //dungeOn(x, y, maxTunnel, maxLength)
+
+        const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+        const tiles = map.addTilesetImage("MyBasicTiles.png", "tiles");
+
+        this.groundLayer = map.createBlankDynamicLayer("Ground", tiles);
+        map.createBlankDynamicLayer("Foreground", tiles);
+
+        this.groundLayer.putTilesAt(level, 0, 0);
+
+        this.groundLayer.setCollision([2]); //walls 2
 
         // *Player
         // Get spawn location
-        var spawnX = Phaser.Math.RND.integerInRange(0, gameValues.screenSize.col - 1),
-            spawnY = Phaser.Math.RND.integerInRange(0, gameValues.screenSize.row - 1);
+        
+        function spawnXgen(){
+            spawnX = Phaser.Math.RND.integerInRange(0, gameValues.mapSize.col - 1);
+            return spawnX;
+        }
+
+        function spawnYgen(){
+             spawnY = Phaser.Math.RND.integerInRange(0, gameValues.mapSize.row - 1);
+             return spawnY;
+        }
+        
+        var spawnX = spawnXgen(),
+            spawnY = spawnYgen();
+        console.log(spawnX, spawnY);
+        
+        while (level[spawnY][spawnX] != 0){
+            spawnX = spawnXgen(); 
+            spawnY = spawnYgen();
+        }
 
         // Create player sprite
         this.player = this.physics.add.sprite(gameValues.tileSize * (spawnX + 0.5), gameValues.tileSize * (spawnY + 0.5), 'player', 0);
+        this.physics.add.collider(this.player, this.groundLayer);
 
         // Make sure the player can't walk off the screen
-        this.physics.world.bounds.width = this.sys.game.config.width; //map.widthInPixels;
-        this.physics.world.bounds.height = this.sys.game.config.height; //map.heightInPixels;
+        this.physics.world.bounds.width = map.widthInPixels;
+        this.physics.world.bounds.height = map.heightInPixels;
         this.player.setCollideWorldBounds(true);
 
         // Player animations
@@ -51,9 +79,9 @@ class playGame extends Phaser.Scene {
         });
 
         // Camera
-        /*var camera = this.cameras.main;
+        var camera = this.cameras.main;
         camera.startFollow(this.player);
-        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);*/
+        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         // Keyboard input
         this.cursors = this.input.keyboard.createCursorKeys();

@@ -1,14 +1,14 @@
 //JavasScript
 
-function randomInterval(min,max){
-    return Math.floor(Math.random()*(max-min+1)+min);
+function randomInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 //dipslays array
-function showArray(array){
-  var output = ''
+function showArray(array) {
+  var output = '';
   for (var i = 0; i < array.length; i++){
-    output += array + '<br>'
+    output += array + '<br>';
   }
 }
 
@@ -24,14 +24,14 @@ function createArray(token, x, y) {
     return array;
   }
 
-  //lets create a randomly generated map for our dungeon crawler
-  function createMap(x, y, maxTunnel, maxLength, token) {
-    let map = createArray(22, x, y), // create a 2d array full of tokens
-      currentRow = randomInterval(3,y - 4), // our current row - start at a random spot
-      currentColumn = randomInterval(3,x - 4), // our current column - start at a random spot
-      directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
-      lastDirection = [], // save the last direction we went
-      randomDirection; // next turn/direction - holds a value from directions
+//lets create a randomly generated map for our dungeon crawler
+function createMap(x, y, maxTunnel, maxLength, token) {
+let map = createArray(4, x, y), // create a 2d array full of tokens
+    currentRow = randomInterval(3,y - 4), // our current row - start at a random spot
+    currentColumn = randomInterval(3,x - 4), // our current column - start at a random spot
+    directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
+    lastDirection = [], // save the last direction we went
+    randomDirection; // next turn/direction - holds a value from directions
 
     // lets create some tunnels - while maxTunnel, dimentions, and maxLength  is greater than 0.
     while (maxTunnel && x && y && maxLength) {
@@ -93,7 +93,8 @@ function styleMap(map, token){
 function htmlShow(array){ //shows an array straight in the demo paragraph
   output = ''
   for (var i = 0; i < array.length; i++){
-    output += array[i] + '<br>'
+    output += array[i] + '<br>';
+    console.log(array[i].length)
   }
   document.getElementById("demo").innerHTML = output;
 }
@@ -103,5 +104,3 @@ function dungeOn(x, y, maxTunnel, maxLength){ //main dungeon generation function
   //htmlShow(map);
   return map
 }
-
-export { randomInterval, dungeOn }
