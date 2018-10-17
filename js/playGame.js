@@ -151,7 +151,7 @@ class playGame extends Phaser.Scene {
         }
 
         // Add animations
-        if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.down.isDown || this.cursors.up.isDown || this.key_D.isDown || this.key_A.isDown || this.key_W.isDown || this.key_S.isDown || this.input.activePointer.isDown) {
+        if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.down.isDown || this.cursors.up.isDown || this.key_D.isDown || this.key_A.isDown || this.key_W.isDown || this.key_S.isDown || this.leftTouch == true || this.rightTouch == true || this.upTouch == true || this.downTouch== true) {
             this.player.anims.play("walk", true);
         } else {
             this.player.anims.play('stand');
