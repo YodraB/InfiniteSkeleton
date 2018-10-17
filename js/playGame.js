@@ -91,13 +91,13 @@ class playGame extends Phaser.Scene {
         
         //Touch input
         this.leftTouch = false
-        this.leftZone = this.add.zone(gameValues.tileSize, this.sys.game.config.height/2, gameValues.tileSize * 2, gameValues.tileSize * 4)
+        this.leftZone = this.add.zone(gameValues.tileSize, this.sys.game.config.height/2, gameValues.tileSize * 2, gameValues.tileSize * 4).setScrollFactor(0);
         this.upTouch = false
-        this.upZone = this.add.zone(this.sys.game.config.width/2, gameValues.tileSize, gameValues.tileSize * 4, gameValues.tileSize * 2)
+        this.upZone = this.add.zone(this.sys.game.config.width/2, gameValues.tileSize, gameValues.tileSize * 4, gameValues.tileSize * 2).setScrollFactor(0);
         this.rightTouch = false
-        this.rightZone = this.add.zone(this.sys.game.config.width - gameValues.tileSize, this.sys.game.config.height/2, gameValues.tileSize * 2, gameValues.tileSize * 4)
+        this.rightZone = this.add.zone(this.sys.game.config.width - gameValues.tileSize, this.sys.game.config.height/2, gameValues.tileSize * 2, gameValues.tileSize * 4).setScrollFactor(0);
         this.downTouch = false
-        this.downZone = this.add.zone(this.sys.game.config.width/2, this.sys.game.config.height - gameValues.tileSize, gameValues.tileSize * 4, gameValues.tileSize * 2)
+        this.downZone = this.add.zone(this.sys.game.config.width/2, this.sys.game.config.height - gameValues.tileSize, gameValues.tileSize * 4, gameValues.tileSize * 2).setScrollFactor(0);
     };
 
     // Called once per frame - default 60 fps
