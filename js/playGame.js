@@ -14,8 +14,8 @@ class playGame extends Phaser.Scene {
     // Load assets
     preload() {
         // Load images
-        this.load.image('tiles', '/assets/tilesets/MyBasicTiles.png');
-        this.load.spritesheet('player', '/assets/sprites/BasePerson.png', { frameWidth: 12, frameHeight: 16});
+        this.load.image('tiles', '/InfiniteSkeleton/assets/tilesets/MyBasicTiles.png');
+        this.load.spritesheet('player', '/InfiniteSkeleton/assets/sprites/BasePerson.png', { frameWidth: 12, frameHeight: 16});
     };
 
     // Called once after preload
