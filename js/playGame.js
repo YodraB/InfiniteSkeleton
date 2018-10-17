@@ -48,7 +48,6 @@ class playGame extends Phaser.Scene {
         
         var spawnX = spawnXgen(),
             spawnY = spawnYgen();
-        console.log(spawnX, spawnY);
         
         while (level[spawnY][spawnX] != 0){
             spawnX = spawnXgen(); 
